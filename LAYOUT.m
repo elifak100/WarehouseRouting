@@ -27,27 +27,28 @@ for floor = 1:num_floors
                 rack_width = 0.5;
                 rack_height = aisle_height / num_bays;
                 if rack == 1
-                    % Draw the left side of the rack
+                    % Draw the left and right side of the rack
                     rack_x = aisle_x + (rack-1) * rack_width;
                 else
-                    % Draw the right side of the rack
+                    % Draw the left and right side of the rack
                     rack_x = aisle_x + aisle_width - rack_width * rack;
                 end
                 rack_y = aisle_y + (bay-1) * rack_height;
                 
-                % Draw the rectangle for the left side of the rack
-                rectangle('Position', [rack_x rack_y rack_width/2 rack_height], 'EdgeColor', 'k', 'FaceColor', 'none');
-                
-                % Draw the rectangle for the right side of the rack
-                rectangle('Position', [rack_x+rack_width/2 rack_y rack_width/2 rack_height], 'EdgeColor', 'k', 'FaceColor', 'none');
-                
+                % Draw the rectangle for the left and right side of the rack
+                rectangle('Position', [rack_x rack_y 2*rack_width rack_height], 'EdgeColor', 'k', 'FaceColor', 'none');
+                % Draw a line in the middle of the rack
+                line_x = rack_x + rack_width;
+                line_y_start = rack_y;
+                line_y_end = rack_y + rack_height;
+                line([line_x line_x], [line_y_start line_y_end], 'Color', 'k', 'LineWidth', 1);
+
                 % Check if there is a product at this location
                 product_location = sprintf('P%d.%03d.%02dC%02d', floor, aisle, rack, bay);
                 if any(strcmp(product_location, product_locations))
                     % Draw a dot to represent the product
-                    dot_x = rack_x + rack_width / 2;
-                    dot_y = rack_y + rack_height / 2;
-                    plot(dot_x, dot_y, 'k.', 'MarkerSize', 20);
+                    rectangle('Position', [rack_x, rack_y, rack_width, rack_height], 'EdgeColor', 'k', 'FaceColor', 'g');
+
                 end
             end
         end
@@ -76,4 +77,4 @@ xlim([-3 (num_aisles+0.5)*aisle_width]);
 ylim([-2 (num_floors+0.5)*aisle_height]);
 
 % Add a title
-title('Warehouse Layout');
+title('Warehouse Layout'); %this code puts the black dot in the middle of two seperate bays.
